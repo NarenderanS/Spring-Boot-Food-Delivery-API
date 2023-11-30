@@ -30,6 +30,9 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> productList = new ArrayList<>();
 
+    @Column(name = "photo")
+    private String photo;
+
     @JsonIgnore
     @CreationTimestamp
     @Column(updatable = false)

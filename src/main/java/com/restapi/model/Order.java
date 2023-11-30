@@ -22,17 +22,17 @@ public class Order {
     private Long id;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderedProducts> orderedProducts;
-
+    private List<OrderedProduct> orderedProducts;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private AppUser appUser;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private OrderStatus orderStatus;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 

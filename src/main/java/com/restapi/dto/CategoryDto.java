@@ -10,17 +10,20 @@ import java.util.List;
 
 @Component
 public class CategoryDto {
-
-    public CategoryResponse mapToCategoryResponse(List<Category> categories) {
+    public CategoryResponse mapToCategoryResponse(Category category) {
         CategoryResponse categoryResponse = new CategoryResponse();
-
-        ArrayList<CategoryRequest> categoryRequests = new ArrayList<>();
-        for (Category category : categories) {
-            categoryRequests.add(new CategoryRequest(category.getId(), category.getTitle()));
-        }
-
-        categoryResponse.setCategories(categoryRequests);
+        categoryResponse.setId(category.getId());
+        categoryResponse.setTitle(category.getTitle());
+        categoryResponse.setPhoto(category.getPhoto());
         return categoryResponse;
+    }
+
+    public List<CategoryResponse> mapToCategoryResponse(List<Category> categories) {
+        List<CategoryResponse> categoryResponses = new ArrayList<>();
+        for (Category category : categories) {
+            categoryResponses.add(mapToCategoryResponse(category));
+        }
+        return categoryResponses;
     }
 
     public Category mapToCategory(CategoryRequest categoryRequest) {
@@ -29,6 +32,7 @@ public class CategoryDto {
             category.setId(categoryRequest.getId());
         }
         category.setTitle(categoryRequest.getTitle());
+        category.setPhoto(categoryRequest.getPhoto());
         return category;
     }
 }

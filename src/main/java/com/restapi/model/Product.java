@@ -35,11 +35,12 @@ public class Product {
     private Double price;
 
     //    @Transient
+    @Column(nullable = false)
     private Integer count;
 
-    @Lob
-    @Column(name = "photo", columnDefinition = "BLOB")
-    private byte[] photo;
+
+    @Column(name = "photo")
+    private String photo;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

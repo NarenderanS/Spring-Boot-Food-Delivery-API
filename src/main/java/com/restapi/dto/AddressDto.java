@@ -5,12 +5,24 @@ import com.restapi.request.AddressRequest;
 import com.restapi.response.AddressResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class AddressDto {
-    public AddressResponse mapToAddressResponse(List<Address> addressList) {
-        return new AddressResponse(addressList);
+
+    public List<AddressResponse> mapToAddressResponse(List<Address> addressList) {
+        List<AddressResponse> addressResponses=new ArrayList<>();
+        for(Address address:addressList){
+            AddressResponse addressResponse=new AddressResponse();
+            addressResponse.setId(address.getId());
+            addressResponse.setAddress(address.getAddress());
+            addressResponse.setCity(address.getCity());
+            addressResponse.setZipcode(address.getZipcode());
+
+            addressResponses.add(addressResponse);
+        }
+        return addressResponses;
     }
     public Address mapToAddress(AddressRequest addressRequest) {
         Address address = new Address();

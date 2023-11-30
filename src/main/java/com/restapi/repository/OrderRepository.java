@@ -14,4 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select o from Order o inner join o.appUser a where a.id=?1")
     Optional<List<Order>> findUserOrder(Long userId);
 
+//    @Query("SELECT o FROM Order o inner join ")
+//    List<Order> findByRestaurantId(Long restaurantId);
 }

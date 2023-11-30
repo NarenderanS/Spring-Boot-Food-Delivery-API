@@ -2,6 +2,7 @@ package com.restapi.service;
 
 import com.restapi.dto.AuthDto;
 import com.restapi.dto.AuthDto;
+import com.restapi.dto.UserDto;
 import com.restapi.exception.common.AppException;
 import com.restapi.exception.common.InvalidUserException;
 import com.restapi.exception.common.ResourceNotFoundException;
@@ -11,12 +12,16 @@ import com.restapi.repository.RoleRepository;
 import com.restapi.repository.UserRepository;
 import com.restapi.request.LoginRequest;
 import com.restapi.request.RegisterRequest;
+import com.restapi.request.UserProfileRequest;
+import com.restapi.response.AppUserResponse;
 import com.restapi.response.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -24,6 +29,8 @@ public class UserService {
 
     @Autowired
     private AuthDto authDto;
+    @Autowired
+    private UserDto userDto;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -48,12 +55,32 @@ public class UserService {
         }
         return authDto.mapToAuthResponse(appUser);
     }
-    public List<AppUser> findAll() {
-        return userRepository.findAll();
+
+    public List<AppUserResponse> findAll() {
+        return userDto.mapToUserResponse(userRepository.findAll());
+    }
+
+    public AppUserResponse findUserDetailsById(Long userId) {
+        return userDto.mapToUserResponse(userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId)));
     }
     public AppUser findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
+    }
+    public AppUser findUserByName(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        });
+    }
+//Error
+    public AppUser updateUserDetails(UserProfileRequest userProfileRequest) {
+        AppUser appUser = userRepository.findById(userProfileRequest.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("userId", "userId", userProfileRequest.getUserId()));
+        appUser.setName(userProfileRequest.getName());
+        appUser.setPassword(bCryptPasswordEncoder.encode(userProfileRequest.getPassword()));
+        userRepository.save(appUser);
+        return appUser;
     }
 
 

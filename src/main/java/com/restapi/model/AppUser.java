@@ -44,11 +44,11 @@ public class AppUser {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role roles;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "appUser")
     private List<Cart> carts;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "appUser")
     private List<Order> orderList = new ArrayList<>();
 
@@ -56,10 +56,11 @@ public class AppUser {
     private List<Address> addressList;
 
 //    @Column(nullable = false)
-//    private String gender;
-//
-//    @Column(nullable = false, length = 15)
-//    private Integer phoneNo;
+    private String gender;
+
+    //    @Column(nullable = false, length = 15)
+
+    private String phoneNo;
 
     @OneToMany(mappedBy = "appUser")
     private List<Restaurant> restaurantList = new ArrayList<>();

@@ -21,4 +21,8 @@ public class RegisterRequest {
     @NotEmpty
     @Size(min = 2, message = "Name should have at least 2 characters")
     private String name;
+    @Size(min = 10, message = "PhoneNo must contain 10 digits")
+    private String phoneNo;
+
+    private String gender;
 }

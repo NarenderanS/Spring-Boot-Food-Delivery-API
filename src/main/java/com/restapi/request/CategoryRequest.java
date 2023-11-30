@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,7 +14,5 @@ import lombok.Setter;
 public class CategoryRequest {
     private Long id;
     private String title;
-    public CategoryRequest(String title) {
-        this.title = title;
-    }
+    private String photo;
 }

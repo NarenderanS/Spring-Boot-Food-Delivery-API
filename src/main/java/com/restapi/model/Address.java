@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,8 +29,8 @@ public class Address {
     @Size(min = 2, message = "City should have at least 2 characters")
     private String city;
 
-    @Column(nullable = false, length = 10)
-    @Size(min = 6, message = "Password should have 6 digits")
+    @Column(nullable = false, length = 6)
+//    @Size(min = 6, message = "Password should have 6 digits")
     private Integer zipcode;
 
     @JsonIgnore
@@ -38,8 +39,8 @@ public class Address {
     private AppUser appUser;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "address")
-    private Order order;
+    @OneToMany(mappedBy = "address")
+    private List<Order> order;
 
     @JsonIgnore
     @CreationTimestamp

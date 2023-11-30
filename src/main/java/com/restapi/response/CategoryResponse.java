@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,5 +13,9 @@ import java.util.List;
 @Setter
 @ToString
 public class CategoryResponse {
-    private List<CategoryRequest> categories = new ArrayList<>();
+    private long id;
+    private String title;
+    @Column(name = "photo")
+    private String photo;
+
 }

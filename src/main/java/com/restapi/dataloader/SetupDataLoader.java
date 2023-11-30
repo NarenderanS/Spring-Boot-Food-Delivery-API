@@ -1,8 +1,10 @@
 package com.restapi.dataloader;
 
 import com.restapi.model.AppUser;
+import com.restapi.model.OrderStatus;
 import com.restapi.model.Role;
 import com.restapi.model.VegOrNonVeg;
+import com.restapi.repository.OrderStatusRepository;
 import com.restapi.repository.RoleRepository;
 import com.restapi.repository.UserRepository;
 import com.restapi.repository.VegOrNonVegRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,6 +30,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private RoleRepository roleRepository;
     @Autowired
     private VegOrNonVegRepository vegOrNonVegRepository;
+    @Autowired
+    private OrderStatusRepository orderStatusRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -49,7 +54,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //        Create Veg or NonVeg
         createVegOrNonVegIfNotFound("Veg");
         createVegOrNonVegIfNotFound("Non Veg");
+//        Create Order Statuses
+        createOrderStatusIfNotFound("Pending");
+        createOrderStatusIfNotFound("Out for Delivery");
+        createOrderStatusIfNotFound("Delivered");
+        createOrderStatusIfNotFound("Cancelled");
+
         alreadySetup = true;
+    }
+
+    @Transactional
+        private void createOrderStatusIfNotFound(final String status) {
+        OrderStatus orderStatus = orderStatusRepository.findByStatus(status);
+        if (orderStatus==null) {
+            orderStatusRepository.save(new OrderStatus(status));
+        }
     }
 
     @Transactional
@@ -78,13 +97,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         return user;
     }
+
     @Transactional
-    private VegOrNonVeg createVegOrNonVegIfNotFound(final String title){
-        VegOrNonVeg vegOrNonVeg=vegOrNonVegRepository.findByName(title);
-        if(vegOrNonVeg==null){
-            vegOrNonVeg=new VegOrNonVeg();
+    private VegOrNonVeg createVegOrNonVegIfNotFound(final String title) {
+        VegOrNonVeg vegOrNonVeg = vegOrNonVegRepository.findByName(title);
+        if (vegOrNonVeg == null) {
+            vegOrNonVeg = new VegOrNonVeg();
             vegOrNonVeg.setName(title);
-            vegOrNonVeg=vegOrNonVegRepository.save(vegOrNonVeg);
+            vegOrNonVeg = vegOrNonVegRepository.save(vegOrNonVeg);
         }
         return vegOrNonVeg;
     }
